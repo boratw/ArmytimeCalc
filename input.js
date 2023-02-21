@@ -81,10 +81,12 @@ function Timechanged(type, day)
 	if(type == 0)
 	{
 		PushIntime(day, CheckTime(document.getElementById("in" + day).value));
+		Calculate();
 	}
 	else if(type == 1)
 	{
 		PushOuttime(day, CheckTime(document.getElementById("out" + day).value));
+		Calculate();
 	}
 	else if(type == 2)
 	{
@@ -104,9 +106,9 @@ function Timechanged(type, day)
 			{
 				PushApptime(day, t);
 			}
+			Calculate();
 		}
 	}
-	Calculate();
 }
 
 function inputfocus(day)
