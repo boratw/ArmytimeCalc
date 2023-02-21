@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script>
+	function EraseAll()
+	{
+		for(var day = 0; day < 5; ++day)
+		{
+			window.localStorage.removeItem("in" + day);
+			window.localStorage.removeItem("out" + day);
+			window.localStorage.removeItem("time" + day);
+		}
+	}
+	</script>
+</head>
+<body onload="EraseAll()">
+초기화되었습니다.
+</body>
+</html>
