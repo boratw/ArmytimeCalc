@@ -52,7 +52,10 @@ function Calculate()
 		{
 			if(!(timelock[day] || (inlock[day] && outlock[day])))
 			{
-				apptime[day] = r;
+				if(r > 240)
+					apptime[day] = r;
+				else
+					apptime[day] = 240;
 				document.getElementById("time" + day).value = FormatTime(r);
 			}
 		}
@@ -162,8 +165,8 @@ function CalculateIn(day)
 	let o = outtime[day];
 	let t = 0;
 	let r = 0;
-	
-	while(t != apptime[day])
+
+	while(t < apptime[day])
 	{
 		if(apptime[day]-t >= 60)
 			i -= 60;
@@ -227,7 +230,7 @@ function CalculateOut(day)
 	let t = 0;
 	let r = 0;
 	
-	while(t != apptime[day])
+	while(t < apptime[day])
 	{
 		if(apptime[day]-t >= 60)
 			o += 60;
