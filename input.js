@@ -21,6 +21,12 @@ function LoadPrevious()
 			document.getElementById("time" + day).value = FormatTime(t);
 			PushApptime(day, Number(t));
 		}
+		t = window.localStorage.getItem("type" + day);
+		if(t != null)
+		{
+			timetype[day] = Number(t);
+			PushType(day);
+		}
 	}
 	Calculate();
 }
@@ -32,16 +38,22 @@ function Erase()
 		window.localStorage.removeItem("in" + day);
 		window.localStorage.removeItem("out" + day);
 		window.localStorage.removeItem("time" + day);
+		window.localStorage.removeItem("type" + day);
 		inlock[day] = false;
 		outlock[day] = false;
 		timelock[day] = false;
 		intime[day] = 540;
 		outtime[day] = 1080;
+		timetype[day] = 0;
 		document.getElementById("in" + day).value = "09:00";
 		document.getElementById("out" + day).value = "18:00";
 		document.getElementById("in" + day).style.backgroundColor = "white"
 		document.getElementById("out" + day).style.backgroundColor = "white"
 		document.getElementById("time" + day).style.backgroundColor = "white"
+		document.getElementById("in" + day).disabled = false;
+		document.getElementById("out" + day).disabled = false;
+		document.getElementById("time" + day).disabled = false;
+		PushType(day);
 	}
 	Calculate();
 }
@@ -122,6 +134,17 @@ function loosefocus(day)
 	Calculate();
 }
 
+function inputtype(day)
+{
+	timetype[day]++;
+	if(timetype[day] == 3)
+	{
+		timetype[day] = 0;
+	}
+	window.localStorage.setItem("type" + day, timetype[day]);
+	PushType(day);
+}
+
 function PushIntime(day, t)
 {
 	document.getElementById("in" + day).style.backgroundColor = "LightSkyBlue"
@@ -153,21 +176,82 @@ function PushApptime(day, t)
 	if(t == null)
 	{
 		timelock[day] = false;
-		document.getElementById("time" + day).style.backgroundColor = "White"
+		document.getElementById("time" + day).style.backgroundColor = "White";
 		window.localStorage.removeItem("time" + day)
 	}
 	else
 	{
-		document.getElementById("time" + day).style.backgroundColor = "LightSkyBlue"
+		document.getElementById("time" + day).style.backgroundColor = "LightSkyBlue";
 		apptime[day] = t;
 		timelock[day] = true;
 		window.localStorage.setItem("time" + day, t);
 		if(inlock[day] && outlock[day])
 		{
 			outlock[day] = false;
-			document.getElementById("out" + day).style.backgroundColor = "White"
+			document.getElementById("out" + day).style.backgroundColor = "White";
 			window.localStorage.removeItem("out" + day)
 		}
 	}
 
+}
+
+function PushType(day)
+{
+	if(timetype[day] == 0)
+	{
+		document.getElementById("type" + day).style.backgroundColor = "White";
+		document.getElementById("type" + day).innerHTML = "정상";
+	}
+	else if(timetype[day] == 1)
+	{
+		document.getElementById("type" + day).style.backgroundColor = "pink";
+		document.getElementById("type" + day).innerHTML = "인정";
+		document.getElementById("in" + day).value = "";
+		document.getElementById("in" + day).disabled = true;
+		document.getElementById("in" + day).style.backgroundColor = "lightgray";
+		document.getElementById("out" + day).value = "";
+		document.getElementById("out" + day).disabled = true;
+		document.getElementById("out" + day).style.backgroundColor = "lightgray";
+		document.getElementById("time" + day).value = "";
+		document.getElementById("time" + day).disabled = true;
+		document.getElementById("time" + day).style.backgroundColor = "lightgray";
+	}
+	else if(timetype[day] == 2)
+	{
+		document.getElementById("type" + day).style.backgroundColor = "#c8ffc8";
+		document.getElementById("type" + day).innerHTML = "반차";
+		document.getElementById("in" + day).disabled = false;
+		if(inlock[day])
+		{
+			document.getElementById("in" + day).value = FormatTime0(intime[day]);
+			document.getElementById("in" + day).style.backgroundColor = "LightSkyBlue"
+		}
+		else
+		{
+			document.getElementById("in" + day).value = "09:00"
+			document.getElementById("in" + day).style.backgroundColor = "White"
+		}
+		document.getElementById("out" + day).disabled = false;
+		if(outlock[day])
+		{
+			document.getElementById("out" + day).value = FormatTime0(outtime[day]);
+			document.getElementById("out" + day).style.backgroundColor = "LightSkyBlue"
+		}
+		else
+		{
+			document.getElementById("out" + day).value = "18:00"
+			document.getElementById("out" + day).style.backgroundColor = "White"
+		}
+		document.getElementById("time" + day).disabled = false;
+		if(timelock[day])
+		{
+			document.getElementById("time" + day).value = FormatTime(apptime[day]);
+			document.getElementById("time" + day).style.backgroundColor = "LightSkyBlue"
+		}
+		else
+		{
+			document.getElementById("time" + day).style.backgroundColor = "White"
+		}
+	}
+	Calculate();
 }

@@ -5,6 +5,7 @@ let timelock = [false, false, false, false, false]
 let intime = [540, 540, 540, 540, 540]
 let outtime = [1080, 1080, 1080, 1080, 1080]
 let apptime = [0, 0, 0, 0, 0]
+let timetype = [0, 0, 0, 0, 0]
 
 function Calculate()
 {
@@ -20,15 +21,22 @@ function Calculate()
 	let alltime = 0;
 	for(let day = 0; day < 5; day++)
 	{
-		if(timelock[day] || (inlock[day] && outlock[day]))
-		{
-			alltime += apptime[day];
-			document.getElementById("time" + day).style.color = "black"
-		}
+		if(timetype[day] == 1)
+			alltime += 480;
 		else
 		{
-			uncalc += 1;
-			document.getElementById("time" + day).style.color = "gray"
+			if(timetype[day] == 2)
+				alltime += 240;
+			if(timelock[day] || (inlock[day] && outlock[day]))
+			{
+				alltime += apptime[day];
+				document.getElementById("time" + day).style.color = "black"
+			}
+			else
+			{
+				uncalc += 1;
+				document.getElementById("time" + day).style.color = "gray"
+			}
 		}
 	}
 	if(alltime > 2400)
@@ -50,27 +58,33 @@ function Calculate()
 			r = 0;
 		for(let day = 0; day < 5; day++)
 		{
-			if(!(timelock[day] || (inlock[day] && outlock[day])))
+			if(timetype[day] != 1)
 			{
-				if(r > 240)
-					apptime[day] = r;
-				else
-					apptime[day] = 240;
-				document.getElementById("time" + day).value = FormatTime(r);
+				if(!(timelock[day] || (inlock[day] && outlock[day])))
+				{
+					if(r > 240)
+						apptime[day] = r;
+					else
+						apptime[day] = 240;
+					document.getElementById("time" + day).value = FormatTime(r);
+				}
 			}
 		}
 	}
 	for(let day = 0; day < 5; day++)
 	{
-		if(!(inlock[day] && outlock[day]))
+		if(timetype[day] != 1)
 		{
-			if(outlock[day]) 
+			if(!(inlock[day] && outlock[day]))
 			{
-				CalculateIn(day);
-			}
-			else
-			{
-				CalculateOut(day);
+				if(outlock[day]) 
+				{
+					CalculateIn(day);
+				}
+				else
+				{
+					CalculateOut(day);
+				}
 			}
 		}
 	}
@@ -157,7 +171,8 @@ function CalculateTime(day)
 	else if(t > 720)
 		t = 720;
 	apptime[day] = t;
-	document.getElementById("time" + day).value = FormatTime(t);
+	if(timetype[day] != 1)
+		document.getElementById("time" + day).value = FormatTime(t);
 }
 function CalculateIn(day)
 {
