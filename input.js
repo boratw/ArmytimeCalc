@@ -200,12 +200,12 @@ function PushType(day)
 	if(timetype[day] == 0)
 	{
 		document.getElementById("type" + day).style.backgroundColor = "White";
-		document.getElementById("type" + day).innerHTML = "정상";
+		document.getElementById("type" + day).value = "정상";
 	}
 	else if(timetype[day] == 1)
 	{
 		document.getElementById("type" + day).style.backgroundColor = "pink";
-		document.getElementById("type" + day).innerHTML = "인정";
+		document.getElementById("type" + day).value = "인정";
 		document.getElementById("in" + day).value = "";
 		document.getElementById("in" + day).disabled = true;
 		document.getElementById("in" + day).style.backgroundColor = "lightgray";
@@ -219,7 +219,7 @@ function PushType(day)
 	else if(timetype[day] == 2)
 	{
 		document.getElementById("type" + day).style.backgroundColor = "#c8ffc8";
-		document.getElementById("type" + day).innerHTML = "반차";
+		document.getElementById("type" + day).value = "반차";
 		document.getElementById("in" + day).disabled = false;
 		if(inlock[day])
 		{
